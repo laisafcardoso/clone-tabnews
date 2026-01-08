@@ -5,7 +5,13 @@ async function status(request, response) {
   const versionDB = await database.query("SHOW server_version;");
   const databaseVersionValue = versionDB.rows[0].server_version;
   const maxConectionDB = await database.query("SHOW max_connections;")
-  const useConectionDB = await database.query("SELECT count(*)::int FROM pg_stat_activity WHERE datname='local_db';")
+  const databaseName = process.env.DB_NAME;
+  const databaseOpenedConnectionsResult = await database.query({
+    text: `SELECT COUNT(*) FROM pg_stat_activity WHERE datname = $1;`,
+    values: [databaseName],
+  });
+
+  const databaseOpenedConnectionsValue = databaseOpenedConnectionsResult.rows[0].count;
 
   response.status(200).json({
     updated_at: updatedAt,
