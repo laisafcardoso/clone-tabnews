@@ -19,7 +19,7 @@ async function status(request, response) {
       database: {
         version: databaseVersionValue,
         max_connections: maxConectionDB.rows[0].max_connections,
-        used_connections: useConectionDB.rows[0].count,
+        used_connections: databaseOpenedConnectionsValue,
       }
     },
   });
